@@ -1,5 +1,16 @@
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { ContextoCarrito } from '../App'
+
 function BarraNavegacion() {
-  return <nav>Barra de Navegación</nav>
+  const { carrito } = useContext(ContextoCarrito)
+
+  return (
+    <nav>
+      <Link to="/">Mi Tienda</Link>
+      <Link to="/carrito">Carrito ({carrito.length})</Link>
+    </nav>
+  )
 }
 
 export default BarraNavegacion
