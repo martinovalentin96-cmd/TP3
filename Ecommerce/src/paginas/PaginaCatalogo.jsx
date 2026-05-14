@@ -4,14 +4,22 @@ import axios from 'axios'
 function PaginaCatalogo() {
   const [productos, setProductos] = useState([])
   const [categorias, setCategorias] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     axios.get('https://dummyjson.com/products?limit=10')
       .then(res => setProductos(res.data.products))
+      .catch(() => setError('No se pudieron cargar los productos'))
 
     axios.get('https://dummyjson.com/products/categories')
       .then(res => setCategorias(res.data))
+      .catch(() => setError('No se pudieron cargar las categorías'))
+      .finally(() => setCargando(false))
   }, [])
+
+  if (cargando) return <p>Cargando productos...</p>
+  if (error) return <p>{error}</p>
 
   return (
     <div>
