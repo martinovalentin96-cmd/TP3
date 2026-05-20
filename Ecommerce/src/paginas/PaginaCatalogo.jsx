@@ -11,6 +11,7 @@ function PaginaCatalogo() {
   const [error, setError] = useState(null)
   const [busqueda, setBusqueda] = useState('')
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
+  const [orden, setOrden] = useState('')
 
   useEffect(() => {
     axios.get('https://dummyjson.com/products?limit=100')
@@ -27,6 +28,11 @@ function PaginaCatalogo() {
   const productosFiltrados = productos
     .filter(producto => producto.title.toLowerCase().includes(busqueda.toLowerCase()))
     .filter(producto => categoriaSeleccionada === '' || producto.category === categoriaSeleccionada)
+    .sort((a, b) => {
+      if (orden === 'asc') return a.price - b.price
+      if (orden === 'desc') return b.price - a.price
+      return 0
+    })
 
   if (cargando) return <p>Cargando productos...</p>
   if (error) return <p>{error}</p>
@@ -40,6 +46,11 @@ function PaginaCatalogo() {
         categoriaSeleccionada={categoriaSeleccionada}
         setCategoriaSeleccionada={setCategoriaSeleccionada}
       />
+      <select value={orden} onChange={e => setOrden(e.target.value)}>
+        <option value="">Sin ordenamiento</option>
+        <option value="asc">Precio: menor a mayor</option>
+        <option value="desc">Precio: mayor a menor</option>
+      </select>
 
       <h2>Productos</h2>
       {productosFiltrados.map(producto => (

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useState, createContext, useContext } from 'react'
+import { useState, useEffect, createContext, useContext } from 'react'
 import PaginaCatalogo from './paginas/PaginaCatalogo'
 import PaginaDetalle from './paginas/PaginaDetalle'
 import PaginaCarrito from './paginas/PaginaCarrito'
@@ -8,9 +8,33 @@ import BarraNavegacion from './componentes/BarraNavegacion'
 export const ContextoCarrito = createContext()
 
 function App() {
-  const [carrito, setCarrito] = useState([])
+  const [carrito, setCarrito] = useState(() => {
+    const guardado = localStorage.getItem('carrito')
+    return guardado ? JSON.parse(guardado) : []
+  })
 
-const agregarAlCarrito = (producto, cantidad) => {
+  useEffect(() => {
+    localStorage.setItem('carrito', JSON.stringify(carrito))
+  }, [carrito])
+
+  const cambiarCantidad = (id, cantidad) => {
+    if (cantidad === '') {
+      setCarrito(prev =>
+        prev.map(item =>
+          item.id === id ? { ...item, cantidad: '' } : item
+        )
+      )
+      return
+    }
+    if (Number(cantidad) < 1) return
+    setCarrito(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, cantidad: Number(cantidad) } : item
+      )
+    )
+  }
+
+  const agregarAlCarrito = (producto, cantidad) => {
     setCarrito(prev => {
       const existe = prev.find(item => item.id === producto.id)
       if (existe) {
@@ -31,7 +55,7 @@ const agregarAlCarrito = (producto, cantidad) => {
   const total = carrito.reduce((acc, item) => acc + item.price * item.cantidad, 0)
 
   return (
-    <ContextoCarrito.Provider value={{ carrito, agregarAlCarrito, eliminarDelCarrito, total }}>
+    <ContextoCarrito.Provider value={{ carrito, agregarAlCarrito, eliminarDelCarrito, cambiarCantidad, total }}>
       <BrowserRouter>
         <BarraNavegacion />
         <Routes>
