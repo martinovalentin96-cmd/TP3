@@ -7,7 +7,7 @@ function BarraNavegacion() {
 
   return (
     <nav>
-      <Link to="/">Mi Tienda</Link>
+      <Link to="/">S&V Store</Link>
       <Link to="/carrito">Carrito ({carrito.length})</Link>
     </nav>
   )
