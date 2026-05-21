@@ -1,16 +1,85 @@
-# React + Vite
+# ◈ S&V STORE
+### Trabajo Práctico N°3 · Desarrollo de Software · UTN
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## Tecnologías utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Herramienta | Uso |
+|---|---|
+| React 19 | Librería de UI |
+| Vite | Bundler y servidor de desarrollo |
+| React Router DOM | Navegación entre páginas |
+| Axios | Peticiones HTTP a la API |
+| DummyJSON API | Fuente de datos de productos |
+| CSS (App.css) | Estilos globales estilo cybertruck |
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Funcionalidades
 
-## Expanding the ESLint configuration
+- **Catálogo** con búsqueda por nombre, filtro por categoría y ordenamiento por precio
+- **Detalle de producto** con imagen, descripción, rating y stock disponible
+- **Carrito de compras** con cantidad editable por ítem y eliminación
+- **Finalizar compra** con validación de stock y mensaje de error detallado
+- **Notificaciones globales** al agregar productos al carrito
+- **Persistencia** del carrito con `localStorage`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Estructura del proyecto
+
+```
+src/
+├── App.jsx              # Contexto global, rutas, sistema de notificaciones
+├── App.css              # Todos los estilos (dark theme / cybertruck)
+├── paginas/
+│   ├── PaginaCatalogo.jsx
+│   ├── PaginaDetalle.jsx
+│   └── PaginaCarrito.jsx
+└── componentes/
+    ├── BarraNavegacion.jsx
+    ├── TarjetaProducto.jsx
+    ├── ItemCarrito.jsx
+    ├── BarraBusqueda.jsx
+    └── FiltroCategorias.jsx
+```
+
+---
+
+## Endpoints de la API utilizados
+
+```
+GET https://dummyjson.com/products?limit=100     → listado de productos
+GET https://dummyjson.com/products/categories    → categorías disponibles
+GET https://dummyjson.com/products/:id           → detalle de un producto
+```
+
+---
+
+## Deploy
+
+🌐 **[https://tp-3-eta.vercel.app/](https://tp-3-eta.vercel.app/)**
+
+El proyecto está desplegado en Vercel. El archivo `vercel.json` redirige todas las rutas a `index.html` para que React Router funcione correctamente.
+
+## Cómo correr el proyecto localmente
+
+```bash
+npm install
+npm run dev
+```
+
+Luego abrir [http://localhost:5173](http://localhost:5173)
+
+---
+
+## Power Ups implementados
+
+- **Power Up 1 — localStorage:** el carrito persiste al recargar la página
+- **Power Up 2 — Ordenamiento:** ordenamiento por precio ascendente y descendente
+- **Power Up 3 — Finalizar compra:** validación de stock al confirmar, con mensaje detallado de error por producto
+
+---
+
+*Desarrollado por Samir Quevedo y Valentín Martino · UTN · 2025*
