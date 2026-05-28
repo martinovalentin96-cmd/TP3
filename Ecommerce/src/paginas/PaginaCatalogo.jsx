@@ -13,20 +13,29 @@ function PaginaCatalogo() {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('')
   const [orden, setOrden] = useState('')
 
+  // Carga las categorías una sola vez al montar
   useEffect(() => {
-    axios.get('https://dummyjson.com/products?limit=100')
-      .then(res => setProductos(res.data.products))
-      .catch(() => setError('No se pudieron cargar los productos'))
-      .finally(() => setCargando(false))
-
     axios.get('https://dummyjson.com/products/categories')
       .then(res => setCategorias(res.data))
       .catch(() => setError('No se pudieron cargar las categorías'))
-      .finally(() => setCargando(false))
   }, [])
 
+  // Cada vez que cambia la búsqueda, decide qué endpoint usar
+  useEffect(() => {
+    setCargando(true)
+    setError(null)
+
+    const url = busqueda.trim()
+      ? `https://dummyjson.com/products/search?q=${encodeURIComponent(busqueda.trim())}`
+      : 'https://dummyjson.com/products?limit=100'
+
+    axios.get(url)
+      .then(res => setProductos(res.data.products))
+      .catch(() => setError('No se pudieron cargar los productos'))
+      .finally(() => setCargando(false))
+  }, [busqueda])
+
   const productosFiltrados = productos
-    .filter(producto => producto.title.toLowerCase().includes(busqueda.toLowerCase()))
     .filter(producto => categoriaSeleccionada === '' || producto.category === categoriaSeleccionada)
     .sort((a, b) => {
       if (orden === 'asc') return a.price - b.price
