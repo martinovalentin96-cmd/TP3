@@ -22,10 +22,11 @@ function PaginaCatalogo() {
 
   // Cada vez que cambia la búsqueda, decide qué endpoint usar
   useEffect(() => {
+    if (busqueda.trim().length > 0 && busqueda.trim().length < 3) return
     setCargando(true)
     setError(null)
 
-    const url = busqueda.trim()
+    const url = busqueda.trim().length >= 3
       ? `https://dummyjson.com/products/search?q=${encodeURIComponent(busqueda.trim())}`
       : 'https://dummyjson.com/products?limit=100'
 
